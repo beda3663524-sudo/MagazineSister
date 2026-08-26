@@ -1,282 +1,318 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Магазин товаров - Крыскины.</title>
   <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.png">
   <style>
-  /* Цвета */
+  /* =========================================================
+     ПЕРЕМЕННЫЕ
+     --header-h меняется только один раз (на десктопе/планшете),
+     все остальные размеры считаются от неё или от clamp() —
+     поэтому отдельные медиа-запросы под каждый элемент больше не нужны.
+     ========================================================= */
   :root {
     --main: #000;
     --siren: #c8a2c8;
     --light-green: #98fb98;
     --sereb: #c0c0c0;
+    --header-h: 72px;           /* высота шапки на телефонах */
+    --gap: clamp(12px, 3vw, 20px);
   }
+ 
+  @media (min-width: 768px) {
+    :root { --header-h: 110px; } /* шапка крупнее на планшетах/десктопе */
+  }
+ 
   /* Очистка */
-    *,
-    *::before,
-    *::after {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-      text-decoration: none;
-      color: white;
-    }
-    body {
-      background: #101010;
-      height: 410dvh;
-      -webkit-tap-highlight-color: transparent;
-    }
-    body::before {
-      content: "";
-      inset: 0;
-      background: radial-gradient(
-        circle at 30% 80%, rgba(200,162,200,.1),
-        transparent 40%),
-        radial-gradient(circle at 80% 30%,
-          rgba(255,255,255,.1),
-          transparent 40%
-        )
-        ;
-      position: fixed;
-    }
-    html {
-      scroll-padding: 50px;
-      scroll-behavior: smooth;
-    }
-    /* header */
-    header {
-      display: flex;
-      align-items: center;
-      gap: 0px;
-      background: black;
-      width: 100%;
-      height: 75px;
-      border-bottom: 2px solid var(--light-green);
-      position: fixed;
-      z-index: 100;
-    }
-    .link {
-      background: rgba(200,200,200, .2);
-      width: 120px;
-      height: 50px;
-      border-radius: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--light-green);
-      margin-left: 20px;
-      font-size: 22px;
-      font-weight: 700;
-      color: gray;
-      transition: color .5s ease-in-out,
-      background .35s ease-in-out;
-    }
-    .link.active {
-      color: white;
-      background: rgba(152,251,152, .15);
-    }
-    /* Main */
-    .img-ava {
-      border-radius: 5000px;
-      width: 50%;
-      height: 50%;
-      padding-top: 100px;
-    }
-    .nickname-hero {
-      color: white;
-      background: linear-gradient(to right, #9c27b0, red);
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 38px;
-      font-weight: 700;
-      margin-top: 30px;
-    }
-    .p-hero {
-      font-size: 22px; 
-      padding-top: 20px;
-    }
-    .hero-tovar {
-      background: rgba(255,255,255,.1);
-      backdrop-filter: blur(5px);
-      width: 35%;
-      height: 50px;
-      border-radius: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      border: 2px solid var(--light-green);
-      margin-top: 20px;
-    }
-    .hero-tovar span {
-      color: var(--light-green);
-      padding-left: 10px;
-    }
-    .photo-herot {
-      color: white;
-      background: linear-gradient(to right, var(--siren), var(--light-green));
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 38px;
-      margin: 10px 0 0 0;
-    }
-    /* slider */
-    #swiper {
-      overflow: hidden;
-      width: 85%;
-      height: 525px;
-      border-radius: 50px;
-      margin-top: 10px;
-      z-index: 10;
-      touch-action: none;
-      display: block;
-      box-shadow: 0 0 20px var(--siren);
-    }
-    #track {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      transition: transform .35s ease-in-out;
-      will-change: transform;
-    }
-    .slide {
-      flex: 0 0 100%;
-      width: 100%;
-      height: 100%;
-    }
-    /* Магазин */
-    .shop-container {
-      background: rgba(255,255,255, .05);
-      backdrop-filter: blur(10px);
-      width: 650px;
-      height: 4250px;
-      margin-top: 50px;
-      border-radius: 50px;
-      box-shadow: 0 0 20px black;
-    }
-    .shop-title {
-      background: rgba(255,255,255, .05);
-      backdrop-filter: blur(10px);
-      width: 225px;
-      height: 60px;
-      text-align: center;
-      border-radius: 500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 0 0 25px;
-      position: relative;
-      top: 25px;
-    }
-    .images {
-      width: 315px;
-      height: 300px;
-      border-radius: 50px;
-      padding-left: 20px;
-      position: relative;
-      top: 50px;
-    }
-    .contact-cont {
-      background: rgba(255,255,255, .5);
-      backdrop-filter: blur(10px);
-      width: 80%;
-      height: 75px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      top: 75px;
-      border-radius: 500px;
-    }
-    .contact-cont svg {
-      margin-right: 10px;
-    }
-    .contact-title {
-      position: relative;
-      top: 50px;
-      right: 25%;
-      font-size: 34px;
-    }
-    /* Оптимизация под девайсы */
-    @media (min-width: 320px) {
-      body {
-        height: 425dvh;
-      }
-      header {
-        height: 85px;
-      }
-      .link {
-        width: 130px;
-        height: 50px;
-      }
-      .img-ava {
-        padding-top: 200px;
-      }
-      .nickname-hero {
-        font-size: 52px;
-      }
-      .p-hero {
-        font-size: 22px;
-      }
-      .hero-tovar {
-        width: 275px;
-        height: 70px;
-      }
-      #swiper {
-        height: 580px;
-      }
-      .shop-container {
-        width: 650px;
-      }
-      .images {
-        position: relative;
-        left: 0px;
-      }
-      .h1-tov,
-      .p-tov {
-        position: relative;
-        left: 0px;
-      }
-      .contact-cont {
-        height: 100px;
-        top: 70px;
-      }
-    }
-    @media (min-width: 768px) {
-      body {
-        height: 366dvh;
-      }
-      header {
-        height: 125px;
-      }
-      .link {
-        width: 165px;
-        height: 75px;
-      }
-      .p-hero {
-        font-size: 28px;
-      }
-      .hero-tovar {
-        width: 250px;
-        height: 75px;
-        font-size: 25px;
-      }
-      #swiper {
-        height: 675px;
-      }
-      .shop-container {
-        width: 800px;
-      }
-      .images {
-        left: 75px;
-      }
-      .h1-tov,
-      .p-tov {
-        left: 75px;
-      }
-    }
+  *, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: white;
+  }
+ 
+  html, body {
+    /* убирает случайный горизонтальный скролл на любых экранах */
+    overflow-x: hidden;
+  }
+ 
+  html {
+    scroll-padding-top: calc(var(--header-h) + 16px); /* якорные ссылки не прячутся под шапку */
+    scroll-behavior: smooth;
+  }
+ 
+  body {
+    background: #101010;
+    min-height: 100dvh;         /* вместо жёстких 410dvh/425dvh/366dvh */
+    padding-top: var(--header-h); /* компенсация fixed-шапки */
+    -webkit-tap-highlight-color: transparent;
+  }
+ 
+  body::before {
+    content: "";
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 80%, rgba(200,162,200,.1), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(255,255,255,.1), transparent 40%);
+    position: fixed;
+    pointer-events: none;       /* фон не должен перехватывать тапы/клики */
+  }
+ 
+  img {
+    max-width: 100%;
+    display: block;             /* страховка: ни одна картинка не вылезет за экран */
+  }
+ 
+  /* header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 3vw, 20px);
+    padding-inline: clamp(12px, 4vw, 32px);
+    background: black;
+    width: 100%;
+    height: var(--header-h);
+    border-bottom: 2px solid var(--light-green);
+    position: fixed;
+    top: 0;
+    z-index: 100;
+  }
+ 
+  .link {
+    background: rgba(200,200,200,.2);
+    flex: 1 1 0;                 /* делит ширину шапки поровну, вместо фикс. width */
+    max-width: 170px;
+    height: clamp(44px, 60%, 75px);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--light-green);
+    font-size: clamp(15px, 4vw, 22px);
+    font-weight: 700;
+    color: gray;
+    transition: color .5s ease-in-out, background .35s ease-in-out;
+  }
+  .link.active {
+    color: white;
+    background: rgba(152,251,152,.15);
+  }
+ 
+  /* ===================== HERO / Main ===================== */
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: clamp(24px, 6vw, 48px) 16px 60px;
+  }
+ 
+  .img-ava {
+    width: clamp(130px, 40vw, 200px);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+ 
+  .nickname-hero {
+    background: linear-gradient(to right, #9c27b0, red);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: clamp(28px, 7vw, 52px);
+    font-weight: 700;
+    margin-top: clamp(16px, 4vw, 30px);
+  }
+ 
+  .p-hero {
+    font-size: clamp(15px, 3.6vw, 22px);
+    line-height: 1.55;
+    max-width: 60ch;
+    padding-top: clamp(14px, 3vw, 20px);
+  }
+ 
+  .hero-tovar {
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(5px);
+    width: clamp(210px, 55vw, 280px);
+    height: clamp(50px, 9vw, 70px);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(16px, 4vw, 22px);
+    border: 2px solid var(--light-green);
+    margin-top: 20px;
+  }
+  .hero-tovar span {
+    color: var(--light-green);
+    padding-left: 10px;
+  }
+ 
+  .photo-herot {
+    background: linear-gradient(to right, var(--siren), var(--light-green));
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: clamp(26px, 6vw, 38px);
+    margin-top: clamp(30px, 6vw, 40px);
+  }
+ 
+  /* ===================== Слайдер ===================== */
+  .slider-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 16px;
+  }
+ 
+  #swiper {
+    overflow: hidden;
+    width: min(90vw, 600px);
+    height: min(600px);
+    aspect-ratio: 3 / 4;         /* пропорция вместо разных px-высот на брейкпоинтах */
+    border-radius: clamp(24px, 6vw, 50px);
+    z-index: 10;
+    user-select: none;
+    box-shadow: 0 0 20px var(--siren);
+  }
+  #track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform .35s ease-in-out;
+    will-change: transform;
+  }
+  .slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+ 
+  #dots {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;            /* точки теперь простой блок под слайдером, без absolute-хаков */
+    cursor: pointer;
+  }
+  .dot {
+    background: white;
+    width: clamp(14px, 3.5vw, 20px);
+    height: clamp(14px, 3.5vw, 20px);
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+  }
+  .dot.active {
+    background: linear-gradient(to right, #9c27b0 30%, #ff0000);
+    border: 2px solid white;
+  }
+ 
+  /* ===================== Магазин ===================== */
+  #shop {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 60px;
+  }
+ 
+  .shop-container {
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(10px);
+    width: min(94vw, 800px);      /* было: жёстко 650px / 800px */
+    height: auto;                 /* было: жёстко 4250px — теперь высота = контенту */
+    margin-top: 50px;
+    border-radius: clamp(24px, 5vw, 50px);
+    box-shadow: 0 0 20px black;
+    padding: clamp(24px, 5vw, 40px) clamp(16px, 4vw, 40px) clamp(32px, 6vw, 48px);
+  }
+ 
+  .shop-title {
+    width: fit-content;           /* было: фикс. 225px, текст мог обрезаться */
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(10px);
+    padding: 0 clamp(20px, 5vw, 32px);
+    height: 56px;
+    text-align: center;
+    border-radius: 999px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: clamp(18px, 4vw, 24px);
+  }
+  .shop-title:not(:first-child) {
+    margin-top: 40px;
+  }
+ 
+  .tov-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* было: repeat(2, 305px) — переполняло узкие экраны */
+    gap: var(--gap);
+    margin-bottom: 8px;
+  }
+ 
+  .tov-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;                 /* защита от переполнения grid-колонки длинным текстом */
+  }
+ 
+  .tov-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: clamp(16px, 4vw, 30px);
+  }
+ 
+  .tov-name {
+    color: var(--light-green);
+    font-size: clamp(15px, 3.6vw, 20px);
+    margin-top: 12px;
+  }
+ 
+  .tov-price {
+    font-size: clamp(14px, 3.4vw, 20px);
+    margin-top: 4px;
+  }
+ 
+  /* ===================== Контакты ===================== */
+  .contact-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 48px;
+    text-align: center;
+  }
+ 
+  .contact-title {
+    font-size: clamp(22px, 5vw, 34px);
+    margin-bottom: 20px;
+  }
+ 
+  .contact-cont {
+    background: rgba(255,255,255,.5);
+    backdrop-filter: blur(10px);
+    width: min(100%, 360px);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 999px;
+  }
+  .contact-cont svg {
+    width: clamp(32px, 8vw, 50px);
+    height: clamp(32px, 8vw, 50px);
+    flex-shrink: 0;
+  }
+  .contact-cont h1 {
+    font-size: clamp(16px, 4vw, 22px);
+  }
   </style>
 </head>
 <body>
@@ -284,204 +320,209 @@
     <a class="link" href="#main">Главная</a>
     <a class="link" href="#shop">Товары</a>
   </header>
-  <section id="main" style="display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;">
+ 
+  <section id="main" class="hero">
     <img class="img-ava" src="./images/avatar.webp" alt="avatar" />
     <h1 class="nickname-hero">Аля крыскина</h1>
-    <p class="p-hero">Я люблю необычный стиль — готику, рисовать,<br/> люблю магазин украшений Vivienne Westwood, <br/>коллекционирую палетки теней.
-      <br/>Я очень творческая и добрая,<br/> так же вообще я самая лучшая в мире и я создатель сваги.</p>
+    <p class="p-hero">
+      Я люблю необычный стиль — готику, рисовать, люблю магазин украшений Vivienne Westwood,
+      коллекционирую палетки теней. Я очень творческая и добрая, так же вообще я самая лучшая
+      в мире и я создатель сваги.
+    </p>
     <div class="hero-tovar">Всего товаров:<span>15</span></div>
     <h1 class="photo-herot">Мои фоточки</h1>
-    <div id="swiper">
-      <div id="track">
-        <img class="slide" src="./images/1slide.jpg" alt="slide" />
-        <img class="slide" src="./images/2slide.jpg" alt="slide" />
-        <img class="slide" src="./images/3slide.jpg" alt="slide" />
-        <img class="slide" src="./images/4slide.jpg" alt="slide" />
-        <img class="slide" src="./images/5slide.jpg" alt="slide" />
-        <img class="slide" src="./images/6slide.jpg" alt="slide" />
-      </div>
-    </div>
-  </section>
-  <section id="shop" style="display: flex;
-  justify-content: center;
-  ">
-    <div>
-      <div class="shop-container">
-        <div>
-          <h1 class="shop-title">Украшения</h1>
-          <div style="display: grid;
-          grid-template-columns: repeat(2, 305px);
-          gap: 15px;
-          ">
-            <div style="display: flex;
-            flex-direction: column;">
-              <img class="images" src="./images/ukrash/Podves.webp" alt="podves" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 65px 0 0 20px">Подвеска</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">823.99₽</p>
-            </div>
-            <div style="display: flex;
-            flex-direction: column;">
-              <img class="images" src="./images/ukrash/PodvesZashik.webp" alt="podves" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 65px 0 0 20px">Подвеска</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">2909.99₽</p>
-            </div>
-            <div style="display: flex;
-            flex-direction: column;">
-              <img class="images" src="./images/ukrash/braslet.webp" alt="brasley" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 65px 0 0 20px">Браслет</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">1064.99₽</p>
-            </div>
-            <div style="display: flex;
-            flex-direction: column;">
-              <img class="images" src="./images/ukrash/Brasletzap.webp" alt="braslet" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 65px 0 0 20px">Браслет</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">275.99₽</p>
-            </div>
-            <div style="display: flex;
-            flex-direction: column;">
-              <img class="images" src="./images/ukrash/spine.webp" alt="podves" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 65px 0 0 20px">Ожирелье</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">4167.99₽</p>
-            </div>
-          </div>
-          <h1 class="shop-title">Аксессуары</h1>
-          <div style="display: grid;
-          grid-template-columns: repeat(2, 305px);
-          gap: 15px;
-          ">
-            <div>
-              <img class="images" src="./images/Accs/brelok.webp" alt="breloj" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Брелок</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">226.99₽</p>
-            </div>
-            <div>
-              <img class="images" src="./images/Accs/brelokPlanet.webp" alt="podves" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Брелок</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">662.99₽</p>
-            </div>
-            <div>
-              <img class="images" src="./images/Accs/sumka.webp" alt="podves" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Сумочка</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">3316.99₽</p>
-            </div>
-          </div>
-          <h1 class="shop-title">Косметика</h1>
-          <div style="display: grid;
-          grid-template-columns: repeat(2, 305px);
-          gap: 15px;
-          ">
-            <div>
-              <img class="images" src="./images/Cosmetic/rymiana.webp" alt="rymiana" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Румянец</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">1297.99₽</p>
-            </div>
-            <div>
-              <img class="images" src="./images/Cosmetic/nabor.webp" alt="nabor" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Набор</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">4489.99₽</p>
-            </div>
-          </div>
-          <h1 class="shop-title">Фигурки</h1>
-          <div style="display: grid;
-          grid-template-columns: repeat(2, 305px);
-          gap: 15px;
-          ">
-            <div>
-              <img class="images" src="./images/Figure/illumi.webp" alt="Figure" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Фигурка</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">2551.99₽</p>
-            </div>
-            <div>
-              <img class="images" src="./images/Figure/catGirl.webp" alt="Figure" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Фигурка</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">7384.99₽</p>
-            </div>
-            <div>
-              <img class="images" src="./images/Figure/poni.webp" alt="Figure" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Фигурка</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">7151.99₽</p>
-            </div>
-          </div>
-          <h1 class="shop-title">Прочее</h1>
-          <div style="display: grid;
-          grid-template-columns: repeat(2, 305px);
-          gap: 15px;
-          ">
-            <div>
-              <img class="images" src="./images/Proch/cat.webp" alt="Zhizn" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">На жизнь</h1>
-              <p class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;">29999.99₽</p>
-            </div>
-            <div>
-              <img class="images" src="./images/Proch/blabla.webp" alt="ChoTo" />
-              <h1 class="h1-tov" style="color: var(--light-green); padding: 50px 0 0 20px">Своими руками</h1>
-              <p class="p-tov"class="p-tov" style="font-size: 22px; padding: 0 0 0 20px;"><span style="font-weight: 600;">???</span>₽</p>
-            </div>
-          </div>
-        </div>
-        <div style="display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        ">
-          <h1 class="contact-title">О покупке</h1>
-          <a class="contact-cont" href="https://t.me/satanisonline">
-            <svg style="width: 50px; height: 50px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" /></svg>
-            <h1>@Satanisonline</h1>
-          </a>
+ 
+    <div class="slider-wrap">
+      <div id="swiper">
+        <div id="track">
+          <img class="slide" src="./images/1slide.jpg" alt="slide" />
+          <img class="slide" src="./images/2slide.jpg" alt="slide" />
+          <img class="slide" src="./images/3slide.jpg" alt="slide" />
+          <img class="slide" src="./images/4slide.jpg" alt="slide" />
+          <img class="slide" src="./images/5slide.jpg" alt="slide" />
+          <img class="slide" src="./images/6slide.jpg" alt="slide" />
         </div>
       </div>
+      <div id="dots"></div>
     </div>
   </section>
+ 
+  <section id="shop">
+    <div class="shop-container">
+ 
+      <h1 class="shop-title">Украшения</h1>
+      <div class="tov-grid">
+        <div class="tov-card">
+          <img class="tov-img" src="./images/ukrash/Podves.webp" alt="Подвеска" />
+          <h2 class="tov-name">Подвеска</h2>
+          <p class="tov-price">823.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/ukrash/PodvesZashik.webp" alt="Подвеска" />
+          <h2 class="tov-name">Подвеска</h2>
+          <p class="tov-price">2909.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/ukrash/braslet.webp" alt="Браслет" />
+          <h2 class="tov-name">Браслет</h2>
+          <p class="tov-price">1064.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/ukrash/Brasletzap.webp" alt="Браслет" />
+          <h2 class="tov-name">Браслет</h2>
+          <p class="tov-price">275.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/ukrash/spine.webp" alt="Ожерелье" />
+          <h2 class="tov-name">Ожерелье</h2>
+          <p class="tov-price">4167.99₽</p>
+        </div>
+      </div>
+ 
+      <h1 class="shop-title">Аксессуары</h1>
+      <div class="tov-grid">
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Accs/brelok.webp" alt="Брелок" />
+          <h2 class="tov-name">Брелок</h2>
+          <p class="tov-price">226.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Accs/brelokPlanet.webp" alt="Брелок" />
+          <h2 class="tov-name">Брелок</h2>
+          <p class="tov-price">662.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Accs/sumka.webp" alt="Сумочка" />
+          <h2 class="tov-name">Сумочка</h2>
+          <p class="tov-price">3316.99₽</p>
+        </div>
+      </div>
+ 
+      <h1 class="shop-title">Косметика</h1>
+      <div class="tov-grid">
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Cosmetic/rymiana.webp" alt="Румянец" />
+          <h2 class="tov-name">Румянец</h2>
+          <p class="tov-price">1297.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Cosmetic/nabor.webp" alt="Набор" />
+          <h2 class="tov-name">Набор</h2>
+          <p class="tov-price">4489.99₽</p>
+        </div>
+      </div>
+ 
+      <h1 class="shop-title">Фигурки</h1>
+      <div class="tov-grid">
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Figure/illumi.webp" alt="Фигурка" />
+          <h2 class="tov-name">Фигурка</h2>
+          <p class="tov-price">2551.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Figure/catGirl.webp" alt="Фигурка" />
+          <h2 class="tov-name">Фигурка</h2>
+          <p class="tov-price">7384.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Figure/poni.webp" alt="Фигурка" />
+          <h2 class="tov-name">Фигурка</h2>
+          <p class="tov-price">7151.99₽</p>
+        </div>
+      </div>
+ 
+      <h1 class="shop-title">Прочее</h1>
+      <div class="tov-grid">
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Proch/cat.webp" alt="На жизнь" />
+          <h2 class="tov-name">На жизнь</h2>
+          <p class="tov-price">29999.99₽</p>
+        </div>
+        <div class="tov-card">
+          <img class="tov-img" src="./images/Proch/blabla.webp" alt="Своими руками" />
+          <h2 class="tov-name">Своими руками</h2>
+          <p class="tov-price"><span style="font-weight: 600;">???</span>₽</p>
+        </div>
+      </div>
+ 
+      <div class="contact-wrap">
+        <h1 class="contact-title">О покупке</h1>
+        <a class="contact-cont" href="https://t.me/satanisonline">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" /></svg>
+          <h1>@Satanisonline</h1>
+        </a>
+      </div>
+ 
+    </div>
+  </section>
+ 
   <script>
-    const el = document.getElementById('swiper');
+    // ---------- Слайдер (свайп + точки) ----------
     const track = document.getElementById('track');
     const slides = document.querySelectorAll('.slide');
+    const dotsCont = document.getElementById('dots');
+    const el = document.getElementById('swiper');
     let startX = 0;
     let current = 0;
+ 
+    function createDots() {
+      dotsCont.innerHTML = '';
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.setAttribute('aria-label', 'Перейти к слайду ' + (i + 1));
+        dot.addEventListener('click', (function (index) {
+          return function () { goTo(index); };
+        })(i));
+        dotsCont.appendChild(dot);
+      }
+      updateDots();
+    }
+ 
+    function updateDots() {
+      const dots = dotsCont.querySelectorAll('.dot');
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle('active', i === current);
+      }
+    }
+ 
     function goTo(i) {
       if (slides.length === 0) return;
-      
       current = i;
-      
       if (current >= slides.length) current = 0;
       if (current < 0) current = slides.length - 1;
       track.style.transform = 'translateX(-' + (current * 100) + '%)';
-    };
-    el.addEventListener('touchstart', function(e) {
+      updateDots();
+    }
+ 
+    el.addEventListener('touchstart', function (e) {
       startX = e.touches[0].clientX;
-    }, {passive: true} );
-    el.addEventListener('touchend', function(e) {
+    }, { passive: true });
+ 
+    el.addEventListener('touchend', function (e) {
       if (!e.changedTouches || e.changedTouches.length === 0) return;
-      
       const dx = e.changedTouches[0].clientX - startX;
       if (Math.abs(dx) > 45) {
         goTo(current + (dx < 0 ? 1 : -1));
       }
     });
-    
+ 
+    createDots();
+ 
+    // ---------- Подсветка активного пункта меню при скролле ----------
     const links = document.querySelectorAll('.link');
     const sections = document.querySelectorAll('section[id]');
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
           links.forEach((link) => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${id}`) {
-              link.classList.add('active');
-            }
+            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
           });
         }
       });
-    }, {
-      rootMargin: '-40% 0px -80% 0px'
-    }
-    );
+    }, { rootMargin: '-40% 0px -80% 0px' });
+ 
     sections.forEach((section) => observer.observe(section));
   </script>
 </body>
